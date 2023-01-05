@@ -6,52 +6,75 @@ public class LowestCommonAncestorBST {
     	if(root == null )
     		return null;
     	
-        if(p.val == q.val && root.val == p.val){
-            return root;
-        }
-        
-    	if(p.val < root.val && q.val < root.val) {
-    		TreeNode lca = lowestCommonAncestor(root.left, p, q);
-//    		if(lca!=null) {
-//    			return root.val < lca.val ? root : lca;
-//    		}
-    		return lca;
-    	} else if(p.val > root.val && q.val > root.val) {
-    		TreeNode lca = lowestCommonAncestor(root.right, p, q);    		
-//    		if(lca!=null) {
-//    			return root.val < lca.val ? root : lca;
-//    		}
-    		return lca;
-    	} else if(p.val < root.val && q.val > root.val) {
-//    		TreeNode left = lowestCommonAncestor(root.left, p, null);    		
-//    		TreeNode right = lowestCommonAncestor(root.right, null, q);
-    		TreeNode left = lowestCommonAncestor(root.left, p, q);    		
-    		TreeNode right = lowestCommonAncestor(root.right, p, q);
-    		if(left!=null && right !=null) {
-    			return root;
-    		} else if(left!=null ) {
-    			return root.val < left.val ? root : left;
-    		} else if(right!=null ) {
-    			return root.val < right.val ? root : right;
-    		}
-    		return null;
-    	} else if(p.val > root.val && q.val < root.val) {
-//    		TreeNode left = lowestCommonAncestor(root.left, null, q);    		
-//    		TreeNode right = lowestCommonAncestor(root.right, p, null);
-    		TreeNode left = lowestCommonAncestor(root.left, p, q);    		
-    		TreeNode right = lowestCommonAncestor(root.right, p, q);
-    		if(left!=null && right !=null) {
-    			return root;
-    		} else if(left!=null ) {
-    			return root.val < left.val ? root : left;
-    		} else if(right!=null ) {
-    			return root.val < right.val ? root : right;
-    		}
-    		return null;
-    	} else if(root.val == p.val || root.val == q.val){
-    		return root;
-    	}
+        if(p!=null && q!=null) {
+            if(p.val == q.val && root.val == p.val){
+                return root;
+            }
 
+            if(p.val < root.val && q.val < root.val) {
+	    		TreeNode lca = lowestCommonAncestor(root.left, p, q);
+	    		return lca;
+	    	} else if(p.val > root.val && q.val > root.val) {
+	    		TreeNode lca = lowestCommonAncestor(root.right, p, q);    		
+	    		return lca;
+	    	} else if(p.val < root.val && q.val > root.val) {
+	    		TreeNode left = lowestCommonAncestor(root.left, p, null);    		
+	    		TreeNode right = lowestCommonAncestor(root.right, null, q);
+	    		if(left!=null && right !=null) {
+	    			return root;
+	    		} else if(left!=null ) {
+	    			return root.val < left.val ? root : left;
+	    		} else if(right!=null ) {
+	    			return root.val < right.val ? root : right;
+	    		}
+	    		return null;
+	    	} else if(p.val > root.val && q.val < root.val) {
+	    		TreeNode left = lowestCommonAncestor(root.left, null, q);    		
+	    		TreeNode right = lowestCommonAncestor(root.right, p, null);
+	    		if(left!=null && right !=null) {
+	    			return root;
+	    		} else if(left!=null ) {
+	    			return root.val < left.val ? root : left;
+	    		} else if(right!=null ) {
+	    			return root.val < right.val ? root : right;
+	    		}
+	    		return null;
+	    	} else if(root.val == p.val || root.val == q.val){
+	    		return root;
+	    	}
+        } else if(p!=null) {
+    		if(root.val == p.val ){
+    			return root;
+	    	} else if(p.val < root.val ) {
+	    		TreeNode left = lowestCommonAncestor(root.left, p, null);    		
+	    		if(left!=null ) {
+	    			return root.val < left.val ? root : left;
+	    		}
+	    		return null;
+	    	} else if(p.val > root.val ) {
+	    		TreeNode right = lowestCommonAncestor(root.right, p, null);
+	    		if(right!=null ) {
+	    			return root.val < right.val ? root : right;
+	    		}
+	    		return null;
+	    	}
+        } else if(q!=null) {
+    		if(root.val == q.val ){
+    			return root;
+	    	} else if(q.val < root.val ) {
+	    		TreeNode left = lowestCommonAncestor(root.left, q, null);    		
+	    		if(left!=null ) {
+	    			return root.val < left.val ? root : left;
+	    		}
+	    		return null;
+	    	} else if(q.val > root.val ) {
+	    		TreeNode right = lowestCommonAncestor(root.right, q, null);
+	    		if(right!=null ) {
+	    			return root.val < right.val ? root : right;
+	    		}
+	    		return null;
+	    	}        	
+        }
         return null;        
     }
     
