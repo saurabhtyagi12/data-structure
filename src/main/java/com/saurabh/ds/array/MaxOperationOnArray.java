@@ -20,38 +20,12 @@ public class MaxOperationOnArray {
 			if(lval + rval == k){
 				cnt++;
 			} else {
-				int lpair = k - lval;
-				Integer lpairFromMap = pair.remove(lpair);
-				if(lpairFromMap !=null){
-					cnt++;
-					lpairFromMap--;
-					if(lpairFromMap > 0){
-						pair.put(lpair, lpairFromMap);
-					}
-				} else {
-					Integer lvalFromMap = pair.get(lval);
-					if(lvalFromMap !=null) {
-						pair.put(lval, lvalFromMap + 1);
-					} else {
-						pair.put(lval, 1);
-					}
+				if(lval < k){
+					cnt = updateCount(cnt, lval, pair, k);
 				}
-
-				int rpair = k - rval;
-				Integer rpairFromMap = pair.remove(rpair);
-				if(rpairFromMap !=null){
-					cnt++;
-					rpairFromMap--;
-					if(rpairFromMap > 0){
-						pair.put(rpair, rpairFromMap);
-					}
-				} else {
-					Integer rvalFromMap = pair.get(rval);
-					if(rvalFromMap !=null) {
-						pair.put(rval, rvalFromMap + 1);
-					} else {
-						pair.put(rval, 1);
-					}
+				
+				if(rval < k) {
+					cnt = updateCount(cnt, rval, pair, k);
 				}
 			}
 			i++;
@@ -61,13 +35,31 @@ public class MaxOperationOnArray {
 		if(i == j && i == (nums.length/2)){
 			int lval = nums[i];
 			int lpair = k - lval;
-			Integer lpairFromMap = pair.remove(lpair);
-			if(lpairFromMap !=null){
+			Integer lpairFromMap = pair.get(lpair);
+			if(lpairFromMap !=null && lpairFromMap > 0){
 				cnt++;
 			} 
 		}
 		return cnt;
     }
+	
+	private int updateCount(int cnt, int lval, Map<Integer, Integer> pair, int k) {
+		int lpair = k - lval;
+		Integer lpairFromMap = pair.get(lpair);
+		if(lpairFromMap !=null && lpairFromMap > 0){
+			cnt++;
+			lpairFromMap--;
+			pair.put(lpair, lpairFromMap);
+		} else {
+			Integer lvalFromMap = pair.get(lval);
+			if(lvalFromMap !=null) {
+				pair.put(lval, lvalFromMap + 1);
+			} else {
+				pair.put(lval, 1);
+			}
+		}
+		return cnt;
+	}
 	
 	public static void main(String[] args) {
 		MaxOperationOnArray moa = new MaxOperationOnArray();
