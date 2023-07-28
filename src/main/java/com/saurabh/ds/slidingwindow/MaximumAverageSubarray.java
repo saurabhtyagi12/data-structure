@@ -8,24 +8,21 @@ class MaximumAverageSubarray {
         if(n == 1)
             return (double)nums[0];
 
-        double avg = 0;
-        double prev = 0;
-        for(int i =0; i < n; i++) {
-            if(win == 0){
-                double temp = prev + nums[i] - nums[i - k];
-                if(temp > avg){
-                    avg = temp;
-                }
-                prev = temp;
-            } else {
-                prev += nums[i];
-                win--;
-                avg = prev;
-            }
+        int avg = 0;
 
+        for(int i =0; i < k; i++) {
+            avg += nums[i];
         }
 
-        return (avg/k);
+        int prev = avg;
+        for(int i =k; i < n; i++) {
+            prev = prev + nums[i] - nums[i - k];
+            if(prev > avg){
+                avg = prev;
+            }
+        }
+
+        return (avg/(1.0*k));
     }
 	
 	public static void main(String[] args){
