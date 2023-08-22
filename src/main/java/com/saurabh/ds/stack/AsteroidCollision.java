@@ -1,28 +1,25 @@
 package com.saurabh.ds.stack;
 
-import java.util.Stack;
+import java.util.Arrays;
 // https://leetcode.com/problems/asteroid-collision/?envType=study-plan-v2&envId=leetcode-75
 
 public class AsteroidCollision {
 	public int[] asteroidCollision(int[] asteroids) {
         int n = asteroids.length;
-		Stack<Integer> st = new Stack<>();
-		st.push(asteroids[0]);
+		int index = 0;
+		int[] remArr = new int[n];
+		remArr[index] = asteroids[0];
 		for(int i=1; i < n; i++){
-			if(st.isEmpty()){
-				st.push(asteroids[i]);
+			if(index == -1){
+				index++;
+				remArr[index] = asteroids[i];
 			} else {		
-				while(!st.isEmpty()){
-					int top = st.peek();
+				while(index > -1){
+					int top = remArr[index];
 					int el = asteroids[i];
-					if(top < 0 && el < 0) {
-						st.push(el);
-						break;
-					} else if(top > 0 && el > 0) {
-						st.push(el);
-						break;
-					} else if(top < 0) {
-						st.push(el);
+					if((top < 0 && el < 0) || (top > 0 && el > 0) || (top < 0)){
+						index++;
+						remArr[index] = el;
 						break;
 					} else {
 						int tmpt = top;
@@ -34,14 +31,15 @@ public class AsteroidCollision {
 						}
 						
 						if(tmpt == tmpel){
-							st.pop();
+							index--;
 							break;
 						} else if(tmpt > tmpel) {
 							break;
 						} else {
-							st.pop();
-							if (st.isEmpty()){
-								st.push(el);
+							index--;
+							if (index == -1){
+								index++;
+								remArr[index] = el;
 								break;
 							}
 						}
@@ -49,13 +47,7 @@ public class AsteroidCollision {
 				}
 			}
 		}
-		int index = st.size();
-		int[] remArr = new int[index];
-		while(!st.isEmpty()){
-			index--;
-			remArr[index] = st.pop();
-		}
-		return remArr;
+		return Arrays.copyOfRange(remArr, 0, index + 1);
     }
 	
 	public static void main(String[] args) {
