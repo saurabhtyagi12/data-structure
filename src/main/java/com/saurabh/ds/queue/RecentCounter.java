@@ -12,7 +12,6 @@ public class RecentCounter {
     public int ping(int t) {
         requests.offer(t);
 		int range = (t - 3000);
-		int cnt = 0;
 		int top = requests.peek();
 		while(top < range) {
 			requests.poll();
@@ -20,7 +19,7 @@ public class RecentCounter {
 		}
 		return requests.size();
     }
-	
+
 	public static void main(String[] args){
 		RecentCounter recentCounter = new RecentCounter();
 		System.out.println(recentCounter.ping(1));
