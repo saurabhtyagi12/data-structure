@@ -8,24 +8,26 @@ import java.util.ArrayDeque;
 public class Dota2Senate {
     public String predictPartyVictory(String senate) {
         boolean isRadiant = true;
-		Queue<String> firstQueue = new ArrayDeque<>();
-		Queue<String> secondQueue = new ArrayDeque<>();
+		Queue<Character> firstQueue = new ArrayDeque<>();
+		Queue<Character> secondQueue = new ArrayDeque<>();
 		int n = senate.length();
 
 		for(int i =0; i<n; i++){
-			firstQueue.offer(""+senate.charAt(i));
+			firstQueue.offer(senate.charAt(i));
 		}
 
 		boolean skipNext = false;
-		String lastChar = firstQueue.peek();
+		char lastChar = firstQueue.peek();
 		int cnt = 0;
+		boolean isDiffChar = false;
 		while(!firstQueue.isEmpty()){
-			String ch = firstQueue.poll();
-			if(lastChar.equals(ch)){
+			char ch = firstQueue.poll();
+			if(lastChar == ch){
 				secondQueue.offer(ch);
 				cnt++;
 			} else {
 				cnt--;
+				isDiffChar = true;
 				if(cnt == 0) {
 					if(!firstQueue.isEmpty())
 						lastChar = firstQueue.peek();
@@ -33,28 +35,15 @@ public class Dota2Senate {
 						lastChar = secondQueue.peek();
 				}
 			}
-			if(firstQueue.isEmpty() && !secondQueue.isEmpty()){
-				boolean isAllSame = true;
-				String ch2 = secondQueue.poll();
-				while(isAllSame && !secondQueue.isEmpty()){
-					String ch3 = secondQueue.poll();
-					if(firstQueue.isEmpty())
-						firstQueue.offer(ch2);
-					
-					firstQueue.offer(ch3);
-					if(!ch2.equals(ch3)){
-						isAllSame = false;
-						break;
-					}
-				}
-				if(isAllSame){
-					if(ch2.equals("D"))
+			if(firstQueue.isEmpty()){
+				if(!isDiffChar){
+					if(lastChar == 'D')
 						isRadiant = false;
 					break;
-				}
-				while(!secondQueue.isEmpty()){
-					String ch3 = secondQueue.poll();
-					firstQueue.offer(ch3);
+				} else {
+					firstQueue = secondQueue;
+					secondQueue = new ArrayDeque<>();
+					isDiffChar = false;
 				}
 			}
 		}
