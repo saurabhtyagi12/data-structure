@@ -7,48 +7,29 @@ import java.util.ArrayDeque;
 
 public class Dota2Senate {
     public String predictPartyVictory(String senate) {
-        boolean isRadiant = true;
-		Queue<Character> firstQueue = new ArrayDeque<>();
-		Queue<Character> secondQueue = new ArrayDeque<>();
+		Queue<Integer> firstQueue = new ArrayDeque<>();
 		int n = senate.length();
 
 		for(int i =0; i<n; i++){
-			firstQueue.offer(senate.charAt(i));
+			firstQueue.offer(0+senate.charAt(i));
 		}
 
-		boolean skipNext = false;
-		char lastChar = firstQueue.peek();
+		int lastChar = firstQueue.peek();
 		int cnt = 0;
-		boolean isDiffChar = false;
-		while(!firstQueue.isEmpty()){
-			char ch = firstQueue.poll();
+		while(firstQueue.size() > cnt){
+			int ch = firstQueue.poll();
 			if(lastChar == ch){
-				secondQueue.offer(ch);
+				firstQueue.offer(ch);
 				cnt++;
 			} else {
 				cnt--;
-				isDiffChar = true;
 				if(cnt == 0) {
-					if(!firstQueue.isEmpty())
-						lastChar = firstQueue.peek();
-					else
-						lastChar = secondQueue.peek();
-				}
-			}
-			if(firstQueue.isEmpty()){
-				if(!isDiffChar){
-					if(lastChar == 'D')
-						isRadiant = false;
-					break;
-				} else {
-					firstQueue = secondQueue;
-					secondQueue = new ArrayDeque<>();
-					isDiffChar = false;
+					lastChar = firstQueue.peek();
 				}
 			}
 		}
 		
-		if(isRadiant)
+		if(lastChar == 'R')
 			return "Radiant";
 		else
 			return "Dire";
