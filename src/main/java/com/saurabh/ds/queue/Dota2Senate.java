@@ -7,25 +7,38 @@ import java.util.ArrayDeque;
 
 public class Dota2Senate {
     public String predictPartyVictory(String senate) {
-		Queue<Integer> firstQueue = new ArrayDeque<>();
 		int n = senate.length();
+		int[] firstQueue = new int[n];
 
 		for(int i =0; i<n; i++){
-			firstQueue.offer(0+senate.charAt(i));
+			firstQueue[i] = senate.charAt(i);
 		}
 
-		int lastChar = firstQueue.peek();
+		int lastChar = firstQueue[0];
 		int cnt = 0;
-		while(firstQueue.size() > cnt){
-			int ch = firstQueue.poll();
+		int lastindex = 0;
+		int i =0;
+		while(n > cnt){
+			int ch = firstQueue[i];
+			i++;
 			if(lastChar == ch){
-				firstQueue.offer(ch);
+				firstQueue[lastindex] = ch;
+				lastindex++;
 				cnt++;
 			} else {
 				cnt--;
 				if(cnt == 0) {
-					lastChar = firstQueue.peek();
+					if(i==n){
+						lastChar = firstQueue[0];
+					} else {
+						lastChar = firstQueue[i];
+					}
 				}
+			}
+			if(i==n){
+				i=0;
+				n=lastindex;
+				lastindex=0;
 			}
 		}
 		
