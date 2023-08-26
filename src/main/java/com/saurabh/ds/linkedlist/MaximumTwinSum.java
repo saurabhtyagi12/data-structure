@@ -1,25 +1,36 @@
 package com.saurabh.ds.linkedlist;
 
-import java.util.List;
-import java.util.ArrayList;
-
 // https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/?envType=study-plan-v2&envId=leetcode-75
 class MaximumTwinSum {
     public int pairSum(ListNode head) {
 		int n = 0;
 		ListNode node = head;
-		List<Integer> ls = new ArrayList<>();
+
 		while(node!=null){
-			ls.add(node.val);
 			n++;
 			node = node.next;
 		}
+
 		int sum = 0;
 		int max = 0;
-		for(int i = 0; i< (n/2); i++) {
-			sum = ls.get(i) + ls.get(n - 1 - i);
+		int[] sumArr = new int[n/2];
+		node = head;
+		int i = 0;
+
+		while(i < (n/2)){
+			sumArr[i] = node.val;
+			i++;
+			node = node.next;
+		}
+
+		i--;
+
+		while(node!=null){
+			sum = sumArr[i] + node.val;
 			if(sum > max)
 				max = sum;
+			i--;
+			node = node.next;
 		}
         return max;
     }
