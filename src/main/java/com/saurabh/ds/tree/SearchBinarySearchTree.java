@@ -1,63 +1,48 @@
 package com.saurabh.ds.tree;
 
-// https://leetcode.com/problems/binary-tree-right-side-view/description/?envType=study-plan-v2&envId=leetcode-75
+// https://leetcode.com/problems/search-in-a-binary-search-tree/description/?envType=study-plan-v2&envId=leetcode-75
 
 import java.util.List;
 import java.util.ArrayList;
 
-public class TreeRightSideView {
- 
-    public List<Integer> rightSideView(TreeNode root) {
-        List<Integer> list = new ArrayList<>();
+public class SearchBinarySearchTree {
 
-		rightSideView(root, list, 0);
-		
-		return list;
-    }
-
-    public List<Integer> rightSideView(TreeNode root, List<Integer> list, int depth) {
+    public TreeNode searchBST(TreeNode root, int val) {
 		if(root == null)
-			return list;
+			return null;
 		
-		if(list.size() == depth)
-			list.add(root.val);
+        if(root.val == val)
+			return root;
 		
-		rightSideView(root.right, list, depth + 1);
-		rightSideView(root.left, list, depth + 1);
-		
-		return list;
+		TreeNode left = searchBST(root.left, val);
+		if(left!=null)
+			return left;
+		return searchBST(root.right, val);
     }
-
+	
 	public static void main(String[] args) {
-		TreeRightSideView trsv = new TreeRightSideView();		
-/*		
-Input: root = [1,2,3,null,5,null,4]
-Output: [1,3,4]
+		SearchBinarySearchTree sbst = new SearchBinarySearchTree();
+/*
+Input: root = [4,2,7,1,3], val = 2
+Output: 2
 
-*/				
+*/
 
-		String[] str1 = {"1","2","3","null","5","null","4"};
+		String[] str1 = {"4","2","7","1","3"};
 		TreeNode root1 = getTree(str1);
-		System.out.println(trsv.rightSideView(root1));
+		System.out.println(sbst.searchBST(root1, 2));
 
-		
-/*		
-Input: root = [1,null,3]
-Output: [1,3]
-	  
-*/				
-		String[] str2 = {"1","null","3"};
-		TreeNode root2 = getTree(str2);
-		System.out.println(trsv.rightSideView(root2));
 
 /*
-Input: root = []
+Input: root = [4,2,7,1,3], val = 5
 Output: []
-*/	
-		TreeNode root3 = null;
-		System.out.println(trsv.rightSideView(root3));
+
+*/
+		String[] str2 = {"4","2","7","1","3"};
+		TreeNode root2 = getTree(str2);
+		System.out.println(sbst.searchBST(root2, 5));
 	}
-	
+
 	public static TreeNode getTree(String[] elVals) {
 		int i = 1;
 		TreeNode root = new TreeNode(Integer.parseInt(elVals[0]));
@@ -78,7 +63,7 @@ Output: []
 				node.left = new TreeNode(Integer.parseInt(elVals[i]));
 				lsNodeNew.add(node.left);
 			}
-			
+
 			if((i+1) >=elVals.length){
 				i++;
 				break;
@@ -87,13 +72,13 @@ Output: []
 				node.right = new TreeNode(Integer.parseInt(elVals[i+1]));
 				lsNodeNew.add(node.right);
 			}
-			
+
 			i=i+2;
-			
+
 		}
 		if(i >= elVals.length)
 			return null;
-		
+
 		return getTree(elVals, lsNodeNew, i);
 	}
 

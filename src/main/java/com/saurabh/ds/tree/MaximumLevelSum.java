@@ -1,63 +1,66 @@
 package com.saurabh.ds.tree;
 
-// https://leetcode.com/problems/binary-tree-right-side-view/description/?envType=study-plan-v2&envId=leetcode-75
+// https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/description/?envType=study-plan-v2&envId=leetcode-75
 
 import java.util.List;
 import java.util.ArrayList;
 
-public class TreeRightSideView {
- 
-    public List<Integer> rightSideView(TreeNode root) {
-        List<Integer> list = new ArrayList<>();
+public class MaximumLevelSum {
 
-		rightSideView(root, list, 0);
-		
-		return list;
+    public int maxLevelSum(TreeNode root) {
+		List<TreeNode> nodes = new ArrayList<TreeNode>();
+		nodes.add(root);
+		return getMaxSumLevel(nodes, Integer.MIN_VALUE, 0, 1);
     }
 
-    public List<Integer> rightSideView(TreeNode root, List<Integer> list, int depth) {
-		if(root == null)
-			return list;
-		
-		if(list.size() == depth)
-			list.add(root.val);
-		
-		rightSideView(root.right, list, depth + 1);
-		rightSideView(root.left, list, depth + 1);
-		
-		return list;
-    }
+	public int getMaxSumLevel(List<TreeNode> nodes, int max, int maxLevel, int level) {
+		if(nodes.isEmpty())
+			return maxLevel;
+		int sum = 0;
+		List<TreeNode> childs = new ArrayList<>();
+		for(TreeNode root : nodes) {
+			sum += root.val;
+			if(root.left!=null)
+				childs.add(root.left);
+			if(root.right!=null)
+				childs.add(root.right);
+		}
+
+		if(sum > max){
+			max = sum;
+			maxLevel = level;
+		}
+		int tempLevel = getMaxSumLevel(childs, max, maxLevel, level + 1);
+
+		if(tempLevel > maxLevel)
+			return tempLevel;
+		else
+			return maxLevel;
+	}
 
 	public static void main(String[] args) {
-		TreeRightSideView trsv = new TreeRightSideView();		
-/*		
-Input: root = [1,2,3,null,5,null,4]
-Output: [1,3,4]
+		MaximumLevelSum mls = new MaximumLevelSum();
+/*
+Input: root = [1,7,0,7,-8,null,null]
+Output: 2
 
-*/				
+*/
 
-		String[] str1 = {"1","2","3","null","5","null","4"};
+		String[] str1 = {"1","7","0","7","-8","null","null"};
 		TreeNode root1 = getTree(str1);
-		System.out.println(trsv.rightSideView(root1));
+		System.out.println(mls.maxLevelSum(root1));
 
-		
-/*		
-Input: root = [1,null,3]
-Output: [1,3]
-	  
-*/				
-		String[] str2 = {"1","null","3"};
-		TreeNode root2 = getTree(str2);
-		System.out.println(trsv.rightSideView(root2));
 
 /*
-Input: root = []
-Output: []
-*/	
-		TreeNode root3 = null;
-		System.out.println(trsv.rightSideView(root3));
+Input: root = [989,null,10250,98693,-89388,null,null,null,-32127]
+Output: 2
+
+*/
+		String[] str2 = {"989","null","10250","98693","-89388","null","null","null","-32127"};
+		TreeNode root2 = getTree(str2);
+		System.out.println(mls.maxLevelSum(root2));
 	}
-	
+
 	public static TreeNode getTree(String[] elVals) {
 		int i = 1;
 		TreeNode root = new TreeNode(Integer.parseInt(elVals[0]));
@@ -78,7 +81,7 @@ Output: []
 				node.left = new TreeNode(Integer.parseInt(elVals[i]));
 				lsNodeNew.add(node.left);
 			}
-			
+
 			if((i+1) >=elVals.length){
 				i++;
 				break;
@@ -87,13 +90,13 @@ Output: []
 				node.right = new TreeNode(Integer.parseInt(elVals[i+1]));
 				lsNodeNew.add(node.right);
 			}
-			
+
 			i=i+2;
-			
+
 		}
 		if(i >= elVals.length)
 			return null;
-		
+
 		return getTree(elVals, lsNodeNew, i);
 	}
 
